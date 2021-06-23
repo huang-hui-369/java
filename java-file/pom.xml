@@ -1,0 +1,27 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ruoshui.huang</groupId>
+  <artifactId>java-base-demo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>java基本用法的demo</name>
+  <description>java各种库(string,collection,io,net...)基本用法的demo</description>
+  
+  <dependencies>
+	<dependency>
+	  <groupId>com.google.guava</groupId>
+	  <artifactId>guava</artifactId>
+	  <version>30.1.1-jre</version>
+	</dependency>
+	<dependency>
+		<groupId>com.github.jsqlparser</groupId>
+		<artifactId>jsqlparser</artifactId>
+		<version>4.0</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.alibaba</groupId>
+	    <artifactId>druid</artifactId>
+	    <version>1.2.6</version>
+	</dependency>
+  </dependencies>
+  
+</project>
