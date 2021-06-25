@@ -1,5 +1,12 @@
 package huang.river.sqlparser;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.nio.file.Paths;
 import java.util.List;
 
 import net.sf.jsqlparser.JSQLParserException;
@@ -52,9 +59,32 @@ public class JSqlParserDemo1 {
 			+ "		WHERE\r\n"
 			+ "			EIGYOU_RIREKI_KIHON_KYOUTUU.KIHON_KYOUTUU_ID = TARGET_ID;";
 	
+	
+	public String readFile(String spath) throws IOException {
+		
+		FileReader fReader = new FileReader(
+				Paths.get("D:\\project\\saitama\\src\\saitama_sql2\\procedure\\SAITAMA.CODE_MAPPING$PROC_DOBOKU_KOBETU.StoredProcedure.sql")
+				.toFile());
+		 BufferedReader br = new BufferedReader(fReader);
+		    StringBuilder sb = new StringBuilder();
+		    String temp = "";
+		    while ((temp = br.readLine()) != null) {
+		    	// 拼接换行符
+		      sb.append(temp + "\n");
+		    }
+		    br.close();
+		    return sb.toString();
+	}
+	
 	public void parse(String sql) {
+		FileReader statementReader = null;
 		try {
-			Statement statement = CCJSqlParserUtil.parse(sql1);
+			statementReader = new FileReader(
+					Paths.get("D:\\project\\saitama\\src\\saitama_sql2\\procedure\\SAITAMA.CODE_MAPPING$PROC_DOBOKU_KOBETU.StoredProcedure.sql")
+					.toFile());
+			
+			Statement statement = CCJSqlParserUtil.parse(statementReader);
+//			Statement statement = CCJSqlParserUtil.parse(sql1);
 			if (statement instanceof Select) {
 		        Select select = (Select) statement;
 		        System.out.println("print parsed sql statement:");
@@ -73,8 +103,15 @@ public class JSqlParserDemo1 {
 		     
 		        System.out.println("====================================");
 			}
-		} catch (JSQLParserException e) {
+			
+		} catch (JSQLParserException | FileNotFoundException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				statementReader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

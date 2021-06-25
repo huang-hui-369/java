@@ -1,27 +1,80 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>ruoshui.huang</groupId>
-  <artifactId>java-base-demo</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>java基本用法的demo</name>
-  <description>java各种库(string,collection,io,net...)基本用法的demo</description>
-  
-  <dependencies>
-	<dependency>
-	  <groupId>com.google.guava</groupId>
-	  <artifactId>guava</artifactId>
-	  <version>30.1.1-jre</version>
-	</dependency>
-	<dependency>
-		<groupId>com.github.jsqlparser</groupId>
-		<artifactId>jsqlparser</artifactId>
-		<version>4.0</version>
-	</dependency>
-	<dependency>
-	    <groupId>com.alibaba</groupId>
-	    <artifactId>druid</artifactId>
-	    <version>1.2.6</version>
-	</dependency>
-  </dependencies>
-  
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ruoshui.huang</groupId>
+	<artifactId>java-base-demo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>java基本用法的demo</name>
+	<description>java各种库(string,collection,io,net...)基本用法的demo</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>30.1.1-jre</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jsqlparser</groupId>
+			<artifactId>jsqlparser</artifactId>
+			<version>4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.2.6</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<configuration>
+					<!--配置文件地址 -->
+					<cfgFile>src/main/codegen/config.fmpp</cfgFile>
+					<!--文件输出目录 -->
+					<outputDirectory>target/generated-sources/fmpp/</outputDirectory>
+					<!--文件模板存放目录 -->
+					<templateDirectory>src/main/codegen/templates</templateDirectory>
+				</configuration>
+				<groupId>com.googlecode.fmpp-maven-plugin</groupId>
+				<artifactId>fmpp-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.freemarker</groupId>
+						<artifactId>freemarker</artifactId>
+						<version>2.3.28</version>
+					</dependency>
+					<dependency>
+						<groupId>net.sourceforge.fmpp</groupId>
+						<artifactId>fmpp</artifactId>
+						<version>0.9.16</version>
+						<exclusions>
+							<exclusion>
+								<groupId>org.freemarker</groupId>
+								<artifactId>freemarker</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/codegen</directory>
+				<targetPath>codegen</targetPath>
+			</resource>
+		</resources>
+	</build>
+
 </project>
