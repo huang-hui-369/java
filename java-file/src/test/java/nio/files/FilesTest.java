@@ -1,10 +1,9 @@
 package nio.files;
 
-import static org.junit.Assert.*;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -78,6 +77,79 @@ public class FilesTest {
 		} catch (IOException e) {
 				e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testWalk() {
+		Path p = Paths.get(".");
+		try {
+			// FileVisitOption.FOLLOW_LINKS
+			Files.walk(p, FileVisitOption.FOLLOW_LINKS).forEach(f->{
+				if(Files.isDirectory(f)) {
+					System.out.format("dir:%s\n", f.getFileName());
+				} else if(Files.isRegularFile(f)) {
+					System.out.format("file:%s\n", f.getFileName());
+				} else {
+					System.out.format("other:%s\n", f.getFileName());
+				}
+			});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testWalk1level() {
+		Path p = Paths.get(".");
+		try {
+			// FileVisitOption.FOLLOW_LINKS
+			Files.walk(p, 1).forEach(f->{
+				if(Files.isDirectory(f)) {
+					System.out.format("dir:%s\n", f.getFileName());
+				} else if(Files.isRegularFile(f)) {
+					System.out.format("file:%s\n", f.getFileName());
+				} else {
+					System.out.format("other:%s\n", f.getFileName());
+				}
+			});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testFind() {
+		Path p = Paths.get(".");
+		try {
+			// FileVisitOption.FOLLOW_LINKS
+			Files.walk(p, FileVisitOption.FOLLOW_LINKS).forEach(f->{
+				if(Files.isDirectory(f)) {
+					System.out.format("dir:%s\n", f.getFileName());
+				} else if(Files.isRegularFile(f)) {
+					System.out.format("file:%s\n", f.getFileName());
+				} else {
+					System.out.format("other:%s\n", f.getFileName());
+				}
+			});
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testOther() {
+//		101
+//		110
+//		111
+		System.out.println(5&5);
+		System.out.println(5&7);
+		System.out.println(6&6);
+		System.out.println(6&5);
+		System.out.println(6&7);
+		
 	}
 
 }

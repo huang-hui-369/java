@@ -66,7 +66,7 @@ public class Find {
 			
 			
 			
-			// 读出所有行
+			// 璇诲嚭鎵�鏈夎
 			List<String> lineList;
 			String line = null;
 			int i = 0;
@@ -74,9 +74,9 @@ public class Find {
 //				System.out.println(file.getFileName());
 //				lineList = Files.readAllLines(file, Charset.forName("shift-jis"));
 //				
-//				// 处理每一行
+//				// 澶勭悊姣忎竴琛�
 //				 for(int i=0; i<lineList.size(); i++ ) {
-//					// 替换一行
+//					// 鏇挎崲涓�琛�
 //					 processLine(lineList.get(i), i);
 //					 
 //				 }
