@@ -92,10 +92,10 @@ public class SpFiles {
 	}
 	
 	public static class FileCharset {
-		static Charset UTF8 = StandardCharsets.UTF_8;
-		static Charset ISO8859_1 = StandardCharsets.ISO_8859_1;
-		static Charset SHIFTJIS = Charset.forName("SHIFT-JIS");
-		static Charset SHIFTJIS_WIN = Charset.forName("windows-31j");
+		public static Charset UTF8 = StandardCharsets.UTF_8;
+		public static Charset ISO8859_1 = StandardCharsets.ISO_8859_1;
+		public static Charset SHIFTJIS = Charset.forName("SHIFT-JIS");
+		public static Charset SHIFTJIS_WIN = Charset.forName("windows-31j");
 		
 	}
 

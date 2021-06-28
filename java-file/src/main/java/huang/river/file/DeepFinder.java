@@ -3,6 +3,7 @@ package huang.river.file;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -12,7 +13,9 @@ import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * 
@@ -40,7 +43,7 @@ import java.util.Objects;
  *    文件和目录: 	匹配符合条件的文件名，和所有的目录名（忽略匹配条件）
  * 
  * @author huang
- *
+ * 
  */
 public class DeepFinder {
 
@@ -244,23 +247,23 @@ public class DeepFinder {
 	
 	/************************  PathProcessor ************************************/
 	public interface PathProcessor {
-		void processFile(Path p);
-        void preProcessDir(Path p);
-        void postProcessDir(Path p);
+		void processFile(Path p) throws IOException ;
+        void preProcessDir(Path p) throws IOException ;
+        void postProcessDir(Path p) throws IOException ;
     }
 	
 	public static class DefaultPathProcessor implements PathProcessor {
 
 		@Override
-		public void processFile(Path p) {
+		public void processFile(Path p) throws IOException {
 		}
 
 		@Override
-		public void preProcessDir(Path p) {
+		public void preProcessDir(Path p) throws IOException  {
 		}
 		
 		@Override
-		public void postProcessDir(Path p) {
+		public void postProcessDir(Path p) throws IOException  {
 		}
 		
 	}
@@ -277,5 +280,38 @@ public class DeepFinder {
 			System.out.format("dir:%s\n", p.toString());
 		}
 	}
+	
+public static class ReadFileAllLinesProcessor extends DefaultPathProcessor {
+		
+		Path filepath = null;
+		
+		List<String> lines = null;
+		
+		Charset charset = null;
+		
+		Consumer<ReadFileAllLinesProcessor> action;
+		
+		public ReadFileAllLinesProcessor(Charset charset, Consumer<ReadFileAllLinesProcessor> action) {
+			this.charset = charset;
+			this.action = action;
+		}
+		
+		@Override
+		public void processFile(Path filepath) throws IOException {
+			this.filepath = filepath;
+			lines = SpFiles.readFileIgnoreErr(filepath, charset);
+			action.accept(this);
+		}
+		
+		public List<String> getLineList() {
+			return lines;
+		}
+		
+		public String getAbsolutePath() {
+			return filepath.toAbsolutePath().toString();
+		}
+ 	
+	}
+	
 	
 }
