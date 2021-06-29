@@ -66,27 +66,45 @@ public class DeepFinder {
 	
 	/************************  build 方法 ************************************/
 	
-	public static DeepFinder getAllFileDir() {
+	public static DeepFinder getAllFileDir(PathProcessor... processor) {
+		if(processor.length==1) {
+			return build(processor[0], FILE_MODLE.FILE_DIR, null);
+		}
 		return build(null, FILE_MODLE.FILE_DIR, null);
 	}
 	
-	public static DeepFinder getAllDir() {
+	public static DeepFinder getAllDir(PathProcessor... processor) {
+		if(processor.length==1) {
+			return build(processor[0], FILE_MODLE.FILE_DIR, null);
+		}
 		return build(null, FILE_MODLE.DIR, null);
 	}
 	
-	public static DeepFinder getAllFile() {
+	public static DeepFinder getAllFile(PathProcessor... processor) {
+		if(processor.length==1) {
+			return build(processor[0], FILE_MODLE.FILE_DIR, null);
+		}
 		return build(null, FILE_MODLE.FILE, null);
 	}
 	
-	public static DeepFinder getGlobFile() {
+	public static DeepFinder getGlobFile(PathProcessor... processor) {
+		if(processor.length==1) {
+			return build(processor[0], FILE_MODLE.FILE_DIR, null);
+		}
 		return build(null, FILE_MODLE.FILE, null);
 	}
 	
-	public static DeepFinder getRegexFile() {
+	public static DeepFinder getRegexFile(PathProcessor... processor) {
+		if(processor.length==1) {
+			return build(processor[0], FILE_MODLE.FILE_DIR, null);
+		}
 		return build(null, FILE_MODLE.FILE, PathPattern.REGEX);
 	}
 	
-	public static DeepFinder getRegexDir() {
+	public static DeepFinder getRegexDir(PathProcessor... processor) {
+		if(processor.length==1) {
+			return build(processor[0], FILE_MODLE.FILE_DIR, null);
+		}
 		return build(null, FILE_MODLE.DIR, PathPattern.REGEX);
 	}
 	
@@ -281,17 +299,17 @@ public class DeepFinder {
 		}
 	}
 	
-public static class ReadFileAllLinesProcessor extends DefaultPathProcessor {
+	public static class ReadFileAllLinesProcessor extends DefaultPathProcessor {
 		
 		Path filepath = null;
 		
 		List<String> lines = null;
 		
-		Charset charset = null;
+		Charset[] charset = null;
 		
 		Consumer<ReadFileAllLinesProcessor> action;
 		
-		public ReadFileAllLinesProcessor(Charset charset, Consumer<ReadFileAllLinesProcessor> action) {
+		public ReadFileAllLinesProcessor(Consumer<ReadFileAllLinesProcessor> action, Charset... charset) {
 			this.charset = charset;
 			this.action = action;
 		}
@@ -305,6 +323,10 @@ public static class ReadFileAllLinesProcessor extends DefaultPathProcessor {
 		
 		public List<String> getLineList() {
 			return lines;
+		}
+		
+		public Path getFilePath() {
+			return filepath;
 		}
 		
 		public String getAbsolutePath() {

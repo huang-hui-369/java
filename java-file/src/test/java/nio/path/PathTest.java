@@ -25,17 +25,20 @@ public class PathTest {
 		Path p2 = Paths.get(URI.create("file:///D:/tmp/docker/doc"));
 		// D:\tmp\docker\doc
 		System.out.println(p2.toString());
+		
+		System.out.println(Paths.get("D:/tmp").relativize(p2).toString());
+		
 		Path p3 = FileSystems.getDefault().getPath(System.getProperty("user.home"),"log", "java.log");
 		// C:\Users\hui\log\java.log
 		System.out.println(p3.toString());
 		Path p4 = Paths.get("D:/", "tmp","docker/doc", "img");
 		// D:\tmp\docker\doc\img
 		System.out.println(p4.toString());
-		// p4µÄÂ·¾¶Õë¶ÔÓÚÖ¸¶¨Â·¾¶µÄ×Ö·û´®Â·¾¶
+		// p4ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½Â·ï¿½ï¿½
 		Path p5 = p4.resolve("../../a.txt");
 		// D:\tmp\docker\doc\img\..\..\a.txt
 		System.out.println(p5.toString());
-		// p5µÄÕæÊµÂ·¾¶
+		// p5ï¿½ï¿½ï¿½ï¿½ÊµÂ·ï¿½ï¿½
 		Path p6 = p5.normalize();
 		// D:\tmp\docker\a.txt
 		System.out.println(p6);
@@ -60,9 +63,9 @@ public class PathTest {
 			System.out.println(p6.getName(i));
 		}
 		
-		// »ñÈ¡ÎÄ¼þÃû²»´øÀ©Õ¹Ãû(a.txtµÄa)
+		// ï¿½ï¿½È¡ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¹ï¿½ï¿½(a.txtï¿½ï¿½a)
 		System.out.println(Files.getNameWithoutExtension(p6.toString()));
-		// »ñÈ¡ÎÄ¼þµÄÀ©Õ¹Ãû(a.txtµÄtxt)
+		// ï¿½ï¿½È¡ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½Õ¹ï¿½ï¿½(a.txtï¿½ï¿½txt)
 		System.out.println(Files.getFileExtension(p6.toString()));
 		
 		
