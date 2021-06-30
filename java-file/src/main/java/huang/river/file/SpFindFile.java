@@ -14,6 +14,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 
 public class SpFindFile {
 	
@@ -62,14 +65,14 @@ public class SpFindFile {
 		for(File1FindResult result : resultList) {
 			count = result.getFindCount();
 			out.format("--------  file:%s  found %d  ---------------\n", result.filepath.toString(), count);
-//			for(int i=0; i<count; i++) {
-//				out.format("### found %d ###\n", i+1);
-				Collection<MachedLineResult> linerstList = result.getLineRstList();
+			for(int i=0; i<count; i++) {
+				out.format("### found %d ###\n", i+1);
+				Collection<MachedLineResult> linerstList = result.getGroupMap().get(i);
 				for(MachedLineResult rst : linerstList) {
 					out.format("%d:,%s, %d\n", rst.getLineNo(), rst.getGroupList().toString(), rst.groupCount);
 				}
 				
-//			}
+			}
 		}
 	}
 	
@@ -123,7 +126,7 @@ public class SpFindFile {
 			srcMap.forEach((Integer lineNo, String linestr)->{
 				MachedLineResult lineRst = isLineMatched(lineNo, linestr);
 				if( lineRst !=null) {
-					result.getLineRstList().add(lineRst);
+					result.getGroupMap().put(matchCnt, lineRst);
 					if(isFind()) {
 						matchCnt++;
 						clear();
@@ -164,7 +167,7 @@ public class SpFindFile {
 		
 		private Path filepath = null;
 		private int findCount = 0;
-		private List<MachedLineResult> lineRstList = new ArrayList<>();
+		Multimap<Integer,MachedLineResult> groupMap = ArrayListMultimap.create();
 		
 		public Path getFilepath() {
 			return filepath;
@@ -178,12 +181,14 @@ public class SpFindFile {
 		public void setFindCount(int findCount) {
 			this.findCount = findCount;
 		}
-		public List<MachedLineResult> getLineRstList() {
-			return lineRstList;
+		public Multimap<Integer, MachedLineResult> getGroupMap() {
+			return groupMap;
 		}
-		public void setLineRstList(List<MachedLineResult> lineRstList) {
-			this.lineRstList = lineRstList;
+		public void setGroupMap(Multimap<Integer, MachedLineResult> groupMap) {
+			this.groupMap = groupMap;
 		}
+		
+		
 		
 		
 	}
