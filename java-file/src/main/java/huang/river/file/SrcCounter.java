@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
+import huang.river.file.DeepFinder.ReadFileAllLinesProcessor;
 import huang.river.string.RegexPattern;
 
 /**
@@ -23,7 +24,7 @@ import huang.river.string.RegexPattern;
  * @author D2019-06
  *
  */
-public class SrcCounter {
+public class SrcCounter extends ReadFileAllLinesProcessor{
 	
 	// 有效sorce行数
 	private int sourceCnt = 0;
@@ -34,52 +35,74 @@ public class SrcCounter {
 	// 注释行数
 	private int commentCnt = 0;
 	
-	private Map<Integer, String> srcMap = new TreeMap<>();
+	// 总行数
+	private int totalCnt = 0;
 	
 	// 是否多行注释中
 	private boolean isMutiCommentState = false;
 	
-	private int totalCnt = 0;
+	// 有效的sorce行Map<行号，行内容>
+	protected Map<Integer, String> srcMap = new TreeMap<>();
 	
+	// 用来标注那些行是注释，那些行是有效行的解析器	
 	private SrcCounterParserI srcCounterParser = null;
 	
+	// 用来处理解析结果	
 	private SrcCounterResultProcessor resultProcessor = null;
 	
+	// 用来解析的目标文件路径
 	private Path workpath;
 	
-	SrcCounter(SrcCounterParserI counter, SrcCounterResultProcessor resultProcessor) {
+	SrcCounter() {
+		
+	}
+ 	
+	SrcCounter(SrcCounterParserI counter, SrcCounterResultProcessor resultProcessor, Charset... charset) {
+		super(charset);
 		this.srcCounterParser = counter;
 		this.resultProcessor = resultProcessor;
 	}
 	
 	/**
-	 * @return　返回java source counter 
+	 * 会用递归的方式遍历指定的目录下的文件进行统计，
+	 * 会用指定的charset打开文件，如果遇到字符编码问题，不会报错会忽略错误的字符。
+	 * @param pathstr	要统计的文件目录
+	 * @param charset	打开文件的字符编码Charset
 	 */
-	public static SrcCounter getJavaCounter(SrcCounterResultProcessor... resultProcessor) {
-		return getCounter(SrcCounterType.java, resultProcessor);
-	}
-	
-	public static SrcCounter getSqlCounter(SrcCounterResultProcessor... resultProcessor) {
-		return getCounter(SrcCounterType.sql, resultProcessor);
-	}
-	
-	public static SrcCounter getCounter(SrcCounterType type, SrcCounterResultProcessor... resultProcessor) {
-		SrcCounterParserI SrcParser = null;
-		if(SrcCounterType.java.equals(type)) {
-			SrcParser = new JavaSrcCounterParser();
-		} else if(SrcCounterType.sql.equals(type)) {
-			SrcParser = new SqlSrcCounterParser();
+	public void count(String pathstr) {
+		
+		try {
+			this.workpath = Paths.get(pathstr);
+			DeepFinder finder = DeepFinder.getGlobFile();
+			finder.setPathProcessor(this);
+			finder.grep(pathstr, "**/" + srcCounterParser.getMatchFileName());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
-		if(resultProcessor.length==1) {
-			return new SrcCounter(SrcParser, resultProcessor[0]);
-		}
-		return new SrcCounter(SrcParser, new ConsoleOutSrcCounterResultProcessor());
 	}
-		
 	
 	/**
-	 * 统计
+	 *	统计一个文件
+	 */
+	@Override
+	public void processFile(Path filepath) throws IOException {
+		super.processFile(filepath);
+		// 文件处理，可以调用getLineList来获取整个文件的内容，获取后统计文件source行数，
+		for(String line : this.getLineList()) {
+			// 行处理
+			countLine(line);
+		}
+		// 
+		resultProcessor.processCount(workpath, this.getFilePath(), totalCnt, sourceCnt, commentCnt, emptyCnt, srcMap);
+		// 为了统计下一个文件清空变量
+		clear();
+	}
+	
+	
+	/**
+	 * 统计行
 	 * @param line
 	 */
 	protected void countLine(String line) {
@@ -103,41 +126,6 @@ public class SrcCounter {
 		
 	}
 	
-
-	/**
-	 * 会用递归的方式遍历指定的目录下的文件进行统计，
-	 * 会用指定的charset打开文件，如果遇到字符编码问题，不会报错会忽略错误的字符。
-	 * @param pathstr	要统计的文件目录
-	 * @param charset	打开文件的字符编码Charset
-	 */
-	public void count(String pathstr, Charset... charset ) {
-		
-		try {
-			this.workpath = Paths.get(pathstr);
-			DeepFinder finder = DeepFinder.getGlobFile();
-			DeepFinder.ReadFileAllLinesProcessor prodessor = new DeepFinder.ReadFileAllLinesProcessor( 
-				// 这是一个call back函数，
-				p-> {
-					// 文件处理，可以调用getLineList来获取整个文件的内容，获取后统计文件source行数，
-					for(String line : p.getLineList()) {
-						// 行处理
-						countLine(line);
-					}
-					// 
-					resultProcessor.processCount(workpath, p.getFilePath(), totalCnt, sourceCnt, commentCnt, emptyCnt, srcMap);
-//					System.out.format("%s,%s\n", p.getAbsolutePath(), formatCountString());
-	//				System.out.println(p.getLineList().size());
-					clear();
-				}, charset);
-			finder.setPathProcessor(prodessor);
-			finder.grep(pathstr, "**/" + srcCounterParser.getMatchFileName());
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
 	
 	private void clear() {
 		this.commentCnt = 0;
@@ -145,6 +133,35 @@ public class SrcCounter {
 		this.isMutiCommentState = false;
 		this.sourceCnt = 0;
 		this.totalCnt = 0;
+	}
+	
+	
+	/**
+	 * @return　返回java source counter 
+	 */
+	public static SrcCounter getJavaCounter(@Nullable Charset charset, SrcCounterResultProcessor... resultProcessor) {
+		return getCounter(charset, SrcCounterType.java, resultProcessor);
+	}
+	
+	public static SrcCounter getSqlCounter(@Nullable Charset charset, SrcCounterResultProcessor... resultProcessor) {
+		return getCounter(charset, SrcCounterType.sql, resultProcessor);
+	}
+	
+	public static SrcCounter getCounter(@Nullable Charset charset, SrcCounterType type, SrcCounterResultProcessor... resultProcessor) {
+		SrcCounterParserI SrcParser = null;
+		if(SrcCounterType.java.equals(type)) {
+			SrcParser = new JavaSrcCounterParser();
+		} else if(SrcCounterType.sql.equals(type)) {
+			SrcParser = new SqlSrcCounterParser();
+		}
+		
+		if(resultProcessor.length==1) {
+			return new SrcCounter(SrcParser, resultProcessor[0]);
+		}
+		if(charset == null) {
+			charset = SpFiles.FileCharset.UTF8;
+		}
+		return new SrcCounter(SrcParser, new ConsoleOutSrcCounterResultProcessor(), charset);
 	}
 	
 	public enum SrcCounterType {

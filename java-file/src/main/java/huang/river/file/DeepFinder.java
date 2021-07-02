@@ -307,18 +307,14 @@ public class DeepFinder {
 		
 		Charset[] charset = null;
 		
-		Consumer<ReadFileAllLinesProcessor> action;
-		
-		public ReadFileAllLinesProcessor(Consumer<ReadFileAllLinesProcessor> action, Charset... charset) {
+		public ReadFileAllLinesProcessor(Charset... charset) {
 			this.charset = charset;
-			this.action = action;
 		}
 		
 		@Override
 		public void processFile(Path filepath) throws IOException {
 			this.filepath = filepath;
 			lines = SpFiles.readFileIgnoreErr(filepath, charset);
-			action.accept(this);
 		}
 		
 		public List<String> getLineList() {

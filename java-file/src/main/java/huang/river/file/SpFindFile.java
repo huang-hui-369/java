@@ -4,6 +4,7 @@ package huang.river.file;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
@@ -18,17 +19,37 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
 
-public class SpFindFile {
+public class SpFindFile extends SrcCounter{
 	
 	File1Finder finder = null;
 	
-	SpFindFile(File1Finder finder) {
+	
+	
+	public void setFinder(File1Finder finder) {
 		this.finder = finder;
 	}
-	
+
+
 	public static SpFindFile getSimpleFileFinder(List<String> regexList) {
-		return new SpFindFile(new SpFindRexpRule(regexList));
+		SpFindFile s = new SpFindFile();
+		s.setFinder(new SpFindRexpRule(regexList));
+		return s;
 	}
+	
+	/**
+	 *	查找一个文件
+	 */
+	@Override
+	public void processFile(Path filepath) throws IOException {
+		super.processFile(filepath);
+		// 根据获取到的有效的行List来查找
+		List<File1FindResult> resultList = new ArrayList<>();
+		File1FindResult result = finder.find1file(filepath, this.srcMap);
+		if(result.getFindCount()>0) {
+			resultList.add(result);
+		}
+	}
+	
 	
 	
 	public List<File1FindResult> find(String pathstr, List<String> regexList, SrcCounter.SrcCounterType type, Charset charset) {
