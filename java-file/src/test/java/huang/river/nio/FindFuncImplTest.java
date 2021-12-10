@@ -1,20 +1,16 @@
 package huang.river.nio;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.Test;
 
-import huang.river.nio.Find;
-
-public class FindTest {
+public class FindFuncImplTest {
 
 	@Test
-	public void test(){
-		
-		String pathstr = "D:\\project\\saitamaMigration-git\\saitama_sql_win\\PROCEDURE";
+	public void testProcess() {
+		String pathstr = "D:\\project\\saitama\\調査";
 		
 //		String pathstr = "D:\\gutProjects\\saitamaMigration\\saitama_sql_win\\test";
 		
@@ -22,14 +18,11 @@ public class FindTest {
 		
 		Path startingDir = Paths.get(pathstr);
 		
-		
-		
-		String pattern = "*.sql";
-		Find finder = new Find();
+		String pattern = "*.txt";
+		FindFuncImpl finder = new FindFuncImpl();
 		try {
 			finder.process(pathstr, pattern);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

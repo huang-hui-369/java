@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Find {
+public class FindOpenCusor {
 
 	/**
 	 * A {@code FileVisitor} that finds all files that match the specified pattern.

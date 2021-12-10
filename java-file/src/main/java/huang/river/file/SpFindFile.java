@@ -70,7 +70,7 @@ public class SpFindFile extends SrcCounter{
 			
 		};
 		
-		SrcCounter.getCounter(type, srcProcessor).count(pathstr, charset);
+		SrcCounter.getCounter(charset, type, srcProcessor).count(pathstr);
 		
 		return resultList;
 		
