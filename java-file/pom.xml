@@ -2,7 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>ruoshui.huang</groupId>
+	<groupId>lhn.base</groupId>
 	<artifactId>java-base-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>java基本用法的demo</name>
@@ -14,6 +14,7 @@
 			<artifactId>guava</artifactId>
 			<version>30.1.1-jre</version>
 		</dependency>
+		<!-- sqlparser -->
 		<dependency>
 			<groupId>com.github.jsqlparser</groupId>
 			<artifactId>jsqlparser</artifactId>
@@ -23,6 +24,35 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>1.2.6</version>
+		</dependency>
+		<!-- bean validator -->
+		<!-- notEmpty... anotation -->
+	 	<!--
+	 	javaEE的商标所有权归oracle的原因，Java EE 9以后改为Jakarta EE，所以不需要java EE的包了
+	 	Java EE -> Jakarta EE
+        javax -> jakarta
+
+	 	<dependency>
+		    <groupId>javax.validation</groupId>
+		    <artifactId>validation-api</artifactId>
+		    <version>2.0.1.Final</version>
+		</dependency>
+		-->
+		<dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>7.0.2.Final</version>
+        </dependency>
+       <!-- <dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator-annotation-processor</artifactId>
+		    <version>7.0.2.Final</version>
+		</dependency>
+		--> 
+        <dependency>
+		    <groupId>org.glassfish</groupId>
+		    <artifactId>jakarta.el</artifactId>
+		    <version>4.0.2</version>
 		</dependency>
 	</dependencies>
 
@@ -40,6 +70,7 @@
 				<groupId>com.googlecode.fmpp-maven-plugin</groupId>
 				<artifactId>fmpp-maven-plugin</artifactId>
 				<version>1.0</version>
+				<!--
 				<executions>
 					<execution>
 						<phase>generate-sources</phase>
@@ -48,6 +79,7 @@
 						</goals>
 					</execution>
 				</executions>
+				 -->
 				<dependencies>
 					<dependency>
 						<groupId>org.freemarker</groupId>
