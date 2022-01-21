@@ -12,7 +12,7 @@ public class ValidationGetAllMsg {
 	
 	
 	/**
-	 * ConstraintViolation から取得できる情報
+	 * 从ConstraintViolation取得所有情報
 	 */
 	public void getAllErrMsgs() {
 		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();

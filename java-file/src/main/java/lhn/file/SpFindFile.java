@@ -1,8 +1,8 @@
 package lhn.file;
 
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+//import static org.junit.Assert.assertNotEquals;
+//import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -123,8 +123,8 @@ public class SpFindFile extends SrcCounter{
 		private int matchCnt = 0;
 		
 		SpFindRexpRule(List<String> regexList) {
-			assertNotNull("regex list is null.", regexList);
-			assertNotEquals("regex list size is 0." ,0, regexList.size());
+//			assertNotNull("regex list is null.", regexList);
+//			assertNotEquals("regex list size is 0." ,0, regexList.size());
 			if(regexList!=null&&regexList.size()>0) {
 				for(String regex: regexList ) {
 					patternList.add(Pattern.compile(regex, Pattern.CASE_INSENSITIVE));

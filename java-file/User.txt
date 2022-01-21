@@ -1,0 +1,4 @@
+class name=User table name=USER
+ column name=UID column type=number column is pk =true
+ column name=UNAME column type=varchar(64) column is pk =false
+

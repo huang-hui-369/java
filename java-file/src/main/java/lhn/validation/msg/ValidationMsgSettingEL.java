@@ -9,27 +9,25 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
 
-public class ValidationMsgSetting3 {
+public class ValidationMsgSettingEL {
 	
-	 
-	 /**
-	 * 在bean上定义的error message中使用formatter
-	 * formatter = java.util.Formatter
+	/**
+	 * 在bean上定义的error message中使用EL表达式
 	 */
 	public void getErrSettingMsg() {
-			Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-			User u = new User();
-			u.setName("aaa");
-			Set<ConstraintViolation<User>> errMsgs = validator.validate(u);
-			for(ConstraintViolation<User> constraintViolation : errMsgs) {
-		        System.out.println(constraintViolation.getMessage());
-			}
+		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+		User u = new User();
+		u.setName("aaa");
+		Set<ConstraintViolation<User>> errMsgs = validator.validate(u);
+		for(ConstraintViolation<User> constraintViolation : errMsgs) {
+	        System.out.println(constraintViolation.getMessage());
+		}
 	}
 	
 	 class User{
 		    // 在bean上定义的error message中使用EL表达式
 	        @NotNull(message="请输入用户名")
-	        @Length(min=5,max=10, message="${formatter.format('输入用户名[%s]长度应该在%d和%d之间', validatedValue, min, max)}")
+	        @Length(min=5,max=10, message="输入用户名[${validatedValue}]长度应该在{min}和{max}之间")
 	        private String name;
 	        
 	    			public String getName() {
@@ -44,7 +42,7 @@ public class ValidationMsgSetting3 {
 	 
 	 public static void main(String[] args) {
 			
-		 ValidationMsgSetting3 v = new ValidationMsgSetting3();
+		 ValidationMsgSettingEL v = new ValidationMsgSettingEL();
 		 v.getErrSettingMsg();
 			
 	}

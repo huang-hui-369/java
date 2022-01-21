@@ -3,7 +3,11 @@ package lhn.file;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -73,8 +77,8 @@ public class DeepFinderTest {
 	@Test
 	public void testProcessor() {
 		try {
-			DeepFinder.getRegexDir().setPathProcessor(new MyProcessor())
-			.grep(".", ".*lhn.*");
+			DeepFinder.getGlobFile().setPathProcessor(new MyProcessor())
+			.grep("D:\\GYOSYA\\LOG\\NYUUSATU\\DBRENKEI\\SEIJYOU\\20210718", "**/06kensetsukobetsu_2_a000_*.csv");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -82,8 +86,32 @@ public class DeepFinderTest {
 	
 	class MyProcessor extends DeepFinder.DefaultPathProcessor {
 		@Override
-		public void processFile(Path p) {
+		public void processFile(Path p) throws IOException {
+			Hashtable<String, List<String>> gyosyaList = new Hashtable();
 			System.out.format("file:%s\n",p.toAbsolutePath());
+			List<String >lines = SpFiles.readFileIgnoreErr(p, Charset.forName("UTF-8"));
+			int i = 0;
+			for(String line : lines) {
+				i++;
+				if(i == 1) {
+					continue;
+				}
+				String[] Columns = line.split(",");
+				List<String> item = gyosyaList.get(Columns[2]);
+				if(item==null) {
+					item = new ArrayList<String>();
+				}
+				item.add(line);
+				gyosyaList.put(Columns[2], item);
+			}
+			
+			gyosyaList.forEach((gyousya, itemList) -> {
+				if(itemList.size()>1) {
+					System.out.println(gyousya + " : " + itemList.size());
+				}
+				
+			});
+			
 		}
 
 		@Override

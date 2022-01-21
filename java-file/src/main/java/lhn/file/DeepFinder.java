@@ -1,6 +1,6 @@
 package lhn.file;
 
-import static org.junit.Assert.assertNotNull;
+//import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -15,7 +15,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 
 /**
  * 
@@ -138,7 +137,7 @@ public class DeepFinder {
 	}
 
 	private boolean isMatch(Path filepath) {
-		assertNotNull(filepath);
+//		assertNotNull(filepath);
 		return pathMatcher.matches(filepath);
 	}
 	
