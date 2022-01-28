@@ -1,8 +1,5 @@
 package lhn.nio.path;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.FileSystems;
@@ -18,6 +15,10 @@ public class PathTest {
 
 	@Test
 	public void test() {
+		
+//		Path p0 = Paths.get("/","/aaa");
+//		System.out.println(p0.toString());
+		
 		
 		Path p1 = Paths.get("/tmp/foo");
 		// \tmp\foo
